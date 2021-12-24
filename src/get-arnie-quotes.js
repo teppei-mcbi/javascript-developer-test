@@ -5,56 +5,45 @@ const { httpGet } = require('./mock-http-interface');
  * @param {*} urls - array of strings
  */
 const getArnieQuotes = async (urls) => {
-  console.log(`----------- getArnieQuotes ----------`)
   const results = [];
 
   // TODO: Implement this function.
   if (Array.isArray(urls)) {
     for (const url of urls) {
-      console.log(`[URL]: ${url}`)
-
-      const quote = await httpGet(url)
-        .then(httpResult => {
-
-          const statusCode = httpResult.status;
-          const msgJson = JSON.parse(httpResult.body);
-
-          switch (statusCode) {
-            case 200:
-              return { 'Arnie Quote': msgJson.message };
-        
-            case 500:
-            default:
-              return { 'FAILURE': msgJson.message}
-          }
-
-          console.log(`success value: ${JSON.stringify(value)}`)
-          return value;
-        })
-        .catch(err => {
-          console.error(`error: ${JSON.stringify(err)}`)
-          return err
-        });
-
-      console.log(`--- quote: ${JSON.stringify(quote)}`)
-
+      const quote = await getQuote(url);
       results.push(quote);
     }
-
-    console.log(`results: ${JSON.stringify(results)}`)
-
   }
   return results;
 };
 
-const urls = [
-  'http://www.smokeballdev.com/arnie0',
-  'http://www.smokeballdev.com/arnie1',
-  'http://www.smokeballdev.com/arnie2',
-  'http://www.smokeballdev.com/arnie3',
-];
+/**
+ * Pass url string and return object with quote or error message
+ * 
+ * @param {*} url 
+ * @returns 
+ */
+const getQuote = async (url) => {
+  const quote = await httpGet(url)
+    .then(httpResult => {
 
-getArnieQuotes(urls);
+      const statusCode = httpResult.status;
+      const msgJson = JSON.parse(httpResult.body);
+
+      switch (statusCode) {
+        case 200:
+          return { 'Arnie Quote': msgJson.message };
+
+        case 500:
+        default:
+          return { 'FAILURE': msgJson.message }
+      }
+    })
+    .catch(err => {
+      return { 'FAILURE': `Unexpected error, ${err.message}`};
+    });
+    return quote;
+}
 
 module.exports = {
   getArnieQuotes,
