@@ -6,7 +6,8 @@
   "author": "Smokeball Development Team",
   "license": "MIT",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "start": "node src/get-arnie-quotes.js"
   },
   "dependencies": {
     "jest": "27.0.6"
