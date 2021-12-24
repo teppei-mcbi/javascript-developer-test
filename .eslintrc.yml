@@ -5,4 +5,7 @@ env:
 extends: eslint:recommended
 parserOptions:
   ecmaVersion: 13
-rules: {}
+rules: {
+  "semi": ["error", "always"],
+  "quotes": ["error", "single"]
+}

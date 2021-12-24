@@ -5,10 +5,11 @@ const dataCache = new Map();
 
 /**
  * Returns an array of object which includes either
- * - { 'Arnie Quote': 'Some cool quote' }
- * - { 'FAILURE': 'Your request has been terminated' }
+ * - { 'Arnie Quote': '<Some cool quote>' }
+ * - { 'FAILURE': '<error message>' }
  * 
  * @param {*} urls - array of strings
+ * @returns an array includes objects
  */
 const getArnieQuotes = async (urls) => {
   const results = [];
@@ -32,7 +33,7 @@ const getArnieQuotes = async (urls) => {
  * or error message (500 error status)
  * 
  * @param {*} url 
- * @returns 
+ * @returns success/failture object
  */
 const getQuote = async (url) => {
 
@@ -57,7 +58,7 @@ const getQuote = async (url) => {
 
         case 500:
         default:
-          return { 'FAILURE': msgJmsg };
+          return { 'FAILURE': msg };
       }
     })
     .catch(err => {
@@ -70,8 +71,10 @@ const getQuote = async (url) => {
 
     return quote;
   }
-}
+};
 
+
+// lines below can be used to run getArnieQuotes(urls) functions using 'npm start'
 // const urls = [
 //   'http://www.smokeballdev.com/arnie0',
 //   'http://www.smokeballdev.com/arnie1',
@@ -79,15 +82,15 @@ const getQuote = async (url) => {
 //   'http://www.smokeballdev.com/arnie3',
 // ];
 
-// async function a() {
-//   console.log(`test 1`)
-//   await getArnieQuotes(urls)
+// async function testRun() {
+//   console.log('test run no.1'); // no data cache to be used
+//   await getArnieQuotes(urls);
   
-//   console.log(`test 2`)
-//   await getArnieQuotes(urls)
+//   console.log('test run no.2'); // data cache should be used
+//   await getArnieQuotes(urls);
 // }
 
-// a()
+// testRun();
 
 module.exports = {
   getArnieQuotes,
