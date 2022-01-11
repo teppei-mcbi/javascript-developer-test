@@ -3,6 +3,46 @@ const { httpGet } = require('./mock-http-interface');
 // store http get result as cache
 const dataCache = new Map();
 
+const getArnieQuotes = async (urls) => {
+  const promises = [];
+
+  // TODO: Implement this function.
+  if (Array.isArray(urls)) { // check if param: 'urls' is an array
+    
+    // loop through th string arrays
+    for (const url of urls) {
+      const p = new Promise((resolve, reject) => {
+        httpGet(url)
+          .then(httpResult => {
+
+            // http get is successful
+            const statusCode = httpResult.status;
+            const msgJson = JSON.parse(httpResult.body); // body has a string which contains JSON object
+            const msg = msgJson.message;
+
+            switch (statusCode) {
+              case 200:
+                resolve({ 'Arnie Quote': msg });
+
+              case 500:
+              default:
+                resolve({ 'FAILURE': msg });
+            }
+          });   
+      });
+      // push to 'promises' array
+      promises.push(p);  
+    } 
+  }
+
+  const results = await Promise.all(promises);
+
+  // console.log(`results: ${results}`)
+
+  return results;
+};
+
+
 /**
  * Returns an array of object which includes either
  * - { 'Arnie Quote': '<Some cool quote>' }
@@ -11,7 +51,7 @@ const dataCache = new Map();
  * @param {*} urls - array of strings
  * @returns an array includes objects
  */
-const getArnieQuotes = async (urls) => {
+const getArnieQuotesWithCache = async (urls) => {
   const results = [];
 
   // TODO: Implement this function.
@@ -94,4 +134,5 @@ const getQuote = async (url) => {
 
 module.exports = {
   getArnieQuotes,
+  getArnieQuotesWithCache,
 };
